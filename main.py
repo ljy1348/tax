@@ -8,7 +8,7 @@ def main():
 
     # 1. Get Data
     data = get_sample_data()
-    print(f"Loaded data for company: {data.header.company_name}")
+    print(f"Loaded data for company: {data.header.corp_name}")
     print(f"Number of summary records: {len(data.summaries)}")
 
     # 2. Generate

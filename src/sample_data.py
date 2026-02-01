@@ -1,4 +1,11 @@
-from src.models import TaxReturnData, TaxReturnHeader, TaxWithholdingSummary
+from src.models import (
+    TaxReturnData,
+    TaxReturnHeader,
+    TaxWithholdingSummary,
+    YearMonth,
+    YMD,
+    NonNegativeInt,
+)
 
 
 def get_sample_data() -> TaxReturnData:
@@ -8,15 +15,15 @@ def get_sample_data() -> TaxReturnData:
 
     # Header Data
     header = TaxReturnHeader(
-        taxpayer_id="1234567891",  # 입력!!!
-        attribution_year_month="202512",  # 입력!!!
-        payment_year_month="202512",  # 입력!!!
-        submission_year_month="202501",  # 입력!!!
-        user_id="chars",  # 입력!!!
-        company_name="대한상회",  # 입력!!!
-        representative_name="김철수",  # 입력!!!
-        write_date="20260110",  # 오늘 -> 임의 지정 (신고일: 2026년 01월 10일)
-        program_code="9000",  # 입력!!!
+        corp_no="1234567891",  # 납세자ID
+        attribution_year_month=YearMonth("202512"),
+        payment_year_month=YearMonth("202512"),
+        submission_year_month=YearMonth("202601"),
+        hometax_id="chars",  # 사용자ID
+        corp_name="대한상회",  # 법인명(상호)
+        representative_name="김철수",
+        write_date=YMD("20260110"),  # 오늘 -> 임의 지정 (신고일: 2026년 01월 10일)
+        program_code="9000",
     )
 
     # Summary Data
@@ -26,14 +33,14 @@ def get_sample_data() -> TaxReturnData:
     # 인원 1, 총지급액 1,000,000, 소득세 30,000
     s1 = TaxWithholdingSummary(
         income_code="A25",
-        count=1,
-        total_payment=1000000,
-        collected_tax=30000,
-        collected_rural_tax=0,
-        penalty_tax=0,
-        adjusted_refund_tax=0,
-        paid_tax=30000,  # 납부세액(소득세 등)
-        paid_rural_tax=0,
+        count=NonNegativeInt(1),
+        total_payment=NonNegativeInt(1000000),
+        collected_tax=NonNegativeInt(30000),
+        collected_rural_tax=NonNegativeInt(0),
+        penalty_tax=NonNegativeInt(0),
+        adjusted_refund_tax=0,  # int
+        paid_tax=NonNegativeInt(30000),  # 납부세액(소득세 등)
+        paid_rural_tax=NonNegativeInt(0),
     )
     summaries.append(s1)
 
@@ -41,14 +48,14 @@ def get_sample_data() -> TaxReturnData:
     # 인원 1, 총지급액 1,000,000, 소득세 30,000
     s2 = TaxWithholdingSummary(
         income_code="A30",
-        count=1,
-        total_payment=1000000,
-        collected_tax=30000,
-        collected_rural_tax=0,
-        penalty_tax=0,
-        adjusted_refund_tax=0,
-        paid_tax=30000,
-        paid_rural_tax=0,
+        count=NonNegativeInt(1),
+        total_payment=NonNegativeInt(1000000),
+        collected_tax=NonNegativeInt(30000),
+        collected_rural_tax=NonNegativeInt(0),
+        penalty_tax=NonNegativeInt(0),
+        adjusted_refund_tax=0,  # int
+        paid_tax=NonNegativeInt(30000),
+        paid_rural_tax=NonNegativeInt(0),
     )
     summaries.append(s2)
 
