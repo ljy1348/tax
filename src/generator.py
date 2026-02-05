@@ -12,7 +12,7 @@ class TaxReturnGenerator:
     Encoding: EUC-KR (CP949)
     """
 
-    ENCODING = "cp949"
+    ENCODING = "euc-kr"
 
     def generate(self, data: TaxReturnData) -> bytes:
         parts = []
@@ -46,10 +46,9 @@ class TaxReturnGenerator:
 
         # Join with CRLF
         # 스펙: "LINE SEQUENTIAL (각 레코드마다 CR/LF값 삽입)"
-        # 마지막 레코드 뒤에도 CRLF가 있어야 하는지, 없어야 하는지 시스템마다 다름.
-        # "오류: 레코드 길이"가 뜨는 경우, 보통 마지막 빈 줄을 레코드로 인식해서 발생함.
-        # 따라서 마지막 CRLF를 제거하고 연결만 함.
-        return b"\r\n".join(parts)
+        # 홈택스/세무 변환 프로그램은 보통 모든 레코드가 CRLF로 끝나야 정상 인식합니다.
+        # 따라서 마지막 레코드 뒤에도 CRLF를 붙여서 합칩니다.
+        return b"".join([p + b"\r\n" for p in parts])
 
     def _create_header(self, h: TaxReturnHeader) -> bytes:
         """

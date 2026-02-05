@@ -2,6 +2,7 @@ from src.models import (
     TaxReturnData,
     TaxReturnHeader,
     TaxWithholdingSummary,
+    TaxRefundAdjustment,
     YearMonth,
     YMD,
     NonNegativeInt,
@@ -15,14 +16,14 @@ def get_sample_data() -> TaxReturnData:
 
     # Header Data
     header = TaxReturnHeader(
-        corp_no="1234567891",  # 납세자ID
-        attribution_year_month=YearMonth("202512"),
-        payment_year_month=YearMonth("202512"),
-        submission_year_month=YearMonth("202601"),
-        hometax_id="chars",  # 사용자ID
-        corp_name="대한상회",  # 법인명(상호)
-        representative_name="김철수",
-        write_date=YMD("20260110"),  # 오늘 -> 임의 지정 (신고일: 2026년 01월 10일)
+        corp_no="9111111901312",  # 납세자ID
+        attribution_year_month=YearMonth("202601"),
+        payment_year_month=YearMonth("202601"),
+        submission_year_month=YearMonth("202602"),
+        hometax_id="jy1643",  # 사용자ID
+        corp_name="이주영",  # 법인명(상호)
+        representative_name="이주영",
+        write_date=YMD("20260203"),  # 오늘 -> 임의 지정 (신고일: 2026년 01월 10일)
         program_code="9000",
     )
 
@@ -39,7 +40,9 @@ def get_sample_data() -> TaxReturnData:
         collected_rural_tax=NonNegativeInt(0),
         penalty_tax=NonNegativeInt(0),
         adjusted_refund_tax=0,  # int
-        paid_tax=NonNegativeInt(30000),  # 납부세액(소득세 등)
+        paid_tax=NonNegativeInt(
+            0
+        ),  # 납부세액(소득세 등) - 검증 에러 반영 (0보다 클 수 없음)
         paid_rural_tax=NonNegativeInt(0),
     )
     summaries.append(s1)
@@ -59,4 +62,23 @@ def get_sample_data() -> TaxReturnData:
     )
     summaries.append(s2)
 
-    return TaxReturnData(header=header, summaries=summaries)
+    # Refund Adjustment Data (Optional)
+    # 22번 레코드 생성용 더미 데이터 (모두 0)
+    refund_adjustment = TaxRefundAdjustment(
+        prev_unrefunded_tax=NonNegativeInt(0),
+        prev_refund_application_tax=NonNegativeInt(0),
+        deduction_balance=NonNegativeInt(0),
+        general_refund_tax=NonNegativeInt(0),
+        trust_property_tax=NonNegativeInt(0),
+        other_refund_tax_financial=NonNegativeInt(0),
+        other_refund_tax_merger=NonNegativeInt(0),
+        adjustment_target_tax=NonNegativeInt(0),
+        current_adjusted_refund_tax=0,
+        carry_over_refund_tax=NonNegativeInt(0),
+        refund_application_tax=NonNegativeInt(0),
+        total_carry_over_refund_tax=NonNegativeInt(0),
+    )
+
+    return TaxReturnData(
+        header=header, summaries=summaries, refund_adjustment=refund_adjustment
+    )
