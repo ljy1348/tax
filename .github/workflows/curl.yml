@@ -1,0 +1,17 @@
+name: curl
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send curl request
+        run: curl -X GET "https://api.github.com/zen"
